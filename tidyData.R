@@ -53,6 +53,20 @@ ggplot(table1, aes(year, cases)) +
 # Discuss how you can achieve this.
 # Which table is the easiest to work with?
 
+# solution without pivot_
+t2a <- table2 %>% 
+  filter(type == "population") %>% 
+  arrange(country, year) 
+
+t2b <- table2 %>% 
+  filter(type != "population") %>% 
+  arrange(country, year) 
+
+t2a %>% 
+  select(-type) %>% 
+  rename(population = count) %>%
+  mutate(cases = t2b$count,
+         rate = cases / population * 10000)
 
 # Real World Problems -----------------------------------------------------
 
@@ -104,6 +118,11 @@ table2 %>%
     "no",      20,    12
   )
 
+preg %>% 
+  pivot_longer(c("male", "female"), 
+               names_to = "sex", 
+               values_to = "count")
+
 # 2. Tidy this dataset
 
 returns <- tibble(
@@ -146,6 +165,8 @@ table3
 table3 %>% 
   separate(rate, into = c("cases", "population"))
 
+testTibble <- tibble(mixedData = c('{"age group":"24"}', '{"age group":"37"}'))
+
 # better
 table3 %>% 
   separate(rate, into = c("cases", "population"), convert = TRUE)
@@ -159,7 +180,8 @@ table5 %>%
   unite(new, century, year)
 
 table5 %>% 
-  unite(new, century, year, sep = "")
+  unite(new, century, year, sep = "") %>%
+  mutate(new = new %>% as.integer)
 
 
 # 1.3 Exercise ------------------------------------------------------------
@@ -169,5 +191,5 @@ table5 %>%
 tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
   separate(x, c("one", "two", "three"))
 
-tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
-  separate(x, c("one", "two", "three"))
+tibble(x = c("a,b,c,x", "d,e", "f,g,i,y"))%>% 
+  separate(x, c("one", "two", "three", "four"), fill = "right")

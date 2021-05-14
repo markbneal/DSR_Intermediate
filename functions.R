@@ -64,7 +64,12 @@ df <- tibble(
   d = rnorm(10)
 )
 
+df <- df %>% mutate(id = row_number()) %>% select(id, everything())
 (df_normalised <-df %>% mutate_all(rescale01))
+df %>% mutate(across(2:5, rescale01))
+
+df %>% mutate(a = rescale01(a),
+              b = rescale01(b))
 
 # still some problems
 x <- c(1:10, Inf)
@@ -85,3 +90,15 @@ rescale01(x)
 #    an x returns "[x] bottles of beer on the wall, [x] bottles of beer."
 #    "If one of those bottles should happen to fall, [x - 1] bottles of beer on the wall."
 #    What cases do you have to care for?
+
+
+both_na <- function(x,y) {
+  candidateVector <- which(is.na(x))
+  candidateVector[candidateVector %in% which(is.na(y))]
+}
+
+nanana <- c(1,2,NA,3,5,NA,6,NA)
+batman <- c(NA,2,NA,3,5,NA,NA,NA)
+
+both_na(nanana, batman)
+
