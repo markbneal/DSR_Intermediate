@@ -95,7 +95,7 @@ table2 %>%
 
 # 1.2. Exercise -----------------------------------------------------------
 
-# Tidy the simple tibble below. 
+# 1. Tidy the simple tibble below. 
 # Do you need to make it wider or longer? What are the variables?
   
   preg <- tribble(
@@ -104,21 +104,35 @@ table2 %>%
     "no",      20,    12
   )
 
+# 2. Tidy this dataset
+
+returns <- tibble(
+  year   = c(2015, 2015, 2016, 2016),
+  half  = c(   1,    2,     1,    2),
+  return = c(1.88, 0.59, 0.92, 0.17)
+) 
 
 
 
 
 
-
-
-
-# One solution
+# Example solutions
 preg %>% 
   pivot_longer(c(male,female), names_to = "gender") %>%
   mutate(pregnant = ifelse(pregnant == "yes", "pregnant", "not_pregnant")) %>%
   pivot_wider(names_from = pregnant, values_from = value) %>% 
   mutate(total = ifelse(is.na(pregnant), not_pregnant, pregnant + not_pregnant),
          rate = pregnant / total)
+
+returns %>% pivot_wider(names_from = year, values_from = return) %>% 
+  pivot_longer(`2015`:`2016`, 
+               names_to = "year", 
+               values_to = "return", 
+               names_transform = list(year = as.integer)) %>%
+  arrange(year, half) %>%
+  ggplot(aes(str_c(year, half, sep = "."), return, group = 1)) + 
+  geom_line() +
+  geom_point()
 
 
 # Divide and conquer ------------------------------------------------------
@@ -148,7 +162,7 @@ table5 %>%
   unite(new, century, year, sep = "")
 
 
-# Exercise 1.3 ------------------------------------------------------------
+# 1.3 Exercise ------------------------------------------------------------
 
 # What do the extra and fill arguments do in separate()? Experiment with the various options for the following two toy datasets.
 
