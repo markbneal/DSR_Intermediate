@@ -58,13 +58,6 @@ for (i in seq_along(df)) {
   df[[i]] <- rescale01(df[[i]])
 }
 
-for (i in seq_along(df)) {
-  for (j in df[[i]]) {
-    print(j)
-  }
-}
-
-
 # While Loop --------------------------------------------------------------
 
 # Good for observing events in web development 
