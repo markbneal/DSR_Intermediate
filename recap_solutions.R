@@ -16,7 +16,8 @@ my_mpg %>% ggplot() + geom_boxplot(aes(cty, class))
 here("data_raw", "mpg.csv") %>%
   read_csv %>%
   ggplot() +
-  geom_boxplot(aes(cty, class))
+  geom_boxplot(aes(cty, class)) + 
+  facet_wrap(~cyl, nrow = 2)
 
 # 4. Which cylinder count has the biggest variance for which class of car?
 
