@@ -1,4 +1,4 @@
-# Libaries needed ---------------------------------------------------------
+# Libraries needed ---------------------------------------------------------
 
 library(tidyverse)
 
@@ -17,5 +17,5 @@ library(tidyverse)
 # 2. Create a smaller data set that only includes flights leaving on "May the Fourth"
 # 3. Normalise  sched_dep_time colum so it represents minutes past midnight
 # 4. Create a new column with the information of whether a flight was cancelled
-# 5. Hoe many minutes past midnight was the earliest flight scheduled, 
+# 5. How many minutes past midnight was the earliest flight scheduled, 
 #    when was the earliest cancelled flight scheduled?
