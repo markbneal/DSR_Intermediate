@@ -159,7 +159,9 @@ table5 %>%
   unite(new, century, year)
 
 table5 %>% 
-  unite(new, century, year, sep = "")
+  unite(new, century, year, sep = "") %>%
+  mutate(year = as.integer(new)) %>%
+  select(-new)
 
 
 # 1.3 Exercise ------------------------------------------------------------
