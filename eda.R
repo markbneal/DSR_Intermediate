@@ -270,6 +270,22 @@ ggplot(data = diamonds, mapping = aes(x = price)) +
 ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
   geom_boxplot()
 
+# Alternative violin
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_violin()
+
+# Alternative random-scatter
+ggplot(data = diamonds %>% slice(sample(1:nrow(diamonds), 10000)), mapping = aes(x = cut, y = price)) +
+  geom_jitter(alpha = .2)
+
+#install.packages("ggbeeswarm")
+library(ggbeeswarm)
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_quasirandom()
+
+ggplot(data = diamonds %>% slice(sample(1:nrow(diamonds), 1000)), mapping = aes(x = cut, y = price)) +
+  geom_beeswarm()
+
 ggplot(data = diamonds) + 
   theme_tufte() +
   geom_tufteboxplot(mapping = aes(x = cut, y = price)) + 
