@@ -280,11 +280,11 @@ ggplot(data = diamonds %>% slice(sample(1:nrow(diamonds), 10000)), mapping = aes
 
 #install.packages("ggbeeswarm")
 library(ggbeeswarm)
-ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+ggplot(data = diamonds, mapping = aes(x = cut, y = price, col = cut)) +
   geom_quasirandom()
 
-ggplot(data = diamonds %>% slice(sample(1:nrow(diamonds), 1000)), mapping = aes(x = cut, y = price)) +
-  geom_beeswarm()
+ggplot(data = diamonds %>% filter(cut %in% c("Premium", "Ideal")) %>% slice(sample(1:nrow(diamonds), 250)), mapping = aes(x = cut, y = price)) +
+  geom_beeswarm(size = 1)
 
 ggplot(data = diamonds) + 
   theme_tufte() +
@@ -303,7 +303,10 @@ ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
   geom_boxplot()
 
 ggplot(data = mpg) +
-  geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy))
+  geom_boxplot(mapping = aes(x = reorder(class, hwy, median), y = hwy))
+
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = fct_reorder(class, hwy, median), y = hwy))
 
 ggplot(data = diamonds) + 
   theme_tufte() +
@@ -324,14 +327,13 @@ ggplot(data = mpg) +
   geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
   coord_flip()
 
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(y = reorder(class, hwy, FUN = median), x = hwy))
+
 
 # Exercise III ------------------------------------------------------------
 # 1. Use what you’ve learned to improve the visualisation of the departure times of cancelled vs. non-cancelled flights.
 # 2. What variable in the diamonds dataset is most important for predicting the price of a diamond? How is that variable correlated with cut? Why does the combination of those two relationships lead to lower quality diamonds being more expensive?
-# 3. Install the ggstance package, and create a horizontal boxplot. How does this compare to using coord_flip()?
-# 4. One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of “outlying values”. One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using geom_lv() to display the distribution of price vs cut. What do you learn? How do you interpret the plots?
-# 5. Compare and contrast geom_violin() with a facetted geom_histogram(), or a coloured geom_freqpoly(). What are the pros and cons of each method?
-# 6. If you have a small dataset, it’s sometimes useful to use geom_jitter() to see the relationship between a continuous and categorical variable. The ggbeeswarm package provides a number of methods similar to geom_jitter(). List them and briefly describe what each one does.
 
 nycflights13::flights %>% 
   mutate(
@@ -377,14 +379,19 @@ ggplot(data = smaller) +
   geom_bin2d(mapping = aes(x = carat, y = price))
 
 ggplot(data = smaller) +
+  geom_density2d(mapping = aes(x = carat, y = price))
+
+ggplot(data = smaller) +
   geom_hex(mapping = aes(x = carat, y = price))
 
 ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
   geom_boxplot(mapping = aes(group = cut_width(carat, 0.1)))
 
 ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
-  geom_boxplot(mapping = aes(group = cut_number(carat, 20)))
+  geom_violin(mapping = aes(group = cut_width(carat, 0.1)))
 
+ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
+  geom_boxplot(mapping = aes(group = cut_number(carat, 20)))
 
 # Exercise V --------------------------------------------------------------
 # 1. Instead of summarising the conditional distribution with a boxplot, you could use a frequency polygon. What do you need to consider when using cut_width() vs cut_number()? How does that impact a visualisation of the 2d distribution of carat and price?
